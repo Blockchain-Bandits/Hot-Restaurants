@@ -1,12 +1,25 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var path = require("path");
+var fs = require("fs");
 
 var app = express();
 var PORT = 3000;
 var PORT = process.env.PORT || 3000;
 
 var reservations = [];
+fs.readFile("reservations.json", "utf8", function(error, data) {
+    
+    if (error) {
+        return console.log(error);
+    }
+
+    reservations = JSON.parse(data)
+
+    // We will then re-display the content as an array for later use.
+    console.log(reservations);
+
+});
 
 app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "home.html"));
@@ -43,10 +56,18 @@ app.get("/api/:reservations?", function (req, res) {
 app.post("/api/new", function (req, res) {
     var newreservation = req.body;
     newreservation.routeName = newreservation.name.replace(/\s+/g, "").toLowerCase();
-
     console.log(newreservation);
+    reservations.push(newreservation);
 
-    characters.push(newreservation);
+    fs.writeFile("reservations.json", reservations, function(err) {
+        
+        if (err) {
+            return console.log(err);
+        }
+
+        console.log("reservations.json was updated!");
+        
+    });
 
     res.json(newreservation);
 });
