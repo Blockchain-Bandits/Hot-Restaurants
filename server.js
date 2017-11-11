@@ -6,15 +6,17 @@ var fs = require("fs");
 var app = express();
 var PORT = process.env.PORT || 3000;
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(bodyParser.json());
 
 var resObj = {
-    reservations:[]
+    reservations: []
 };
 
-fs.readFile("reservations.json", "utf8", function(error, data) {
-    
+fs.readFile("reservations.json", "utf8", function (error, data) {
+
     if (error) {
         return console.log(error);
     }
@@ -64,17 +66,38 @@ app.post("/api/new", function (req, res) {
     newreservation.routeName = newreservation.name.replace(/\s+/g, "").toLowerCase();
     resObj.reservations.push(newreservation);
     console.log(resObj);
-    fs.writeFile("reservations.json", JSON.stringify(resObj), function(err) {
-        
+    fs.writeFile("reservations.json", JSON.stringify(resObj), function (err) {
+
         if (err) {
             return console.log(err);
         }
 
         console.log("reservations.json was updated!");
-        
+
     });
 
     res.json(newreservation);
+});
+
+
+fs.readFile("reservations.json", "utf8", function (error, data) {
+
+    if (error) {
+        return console.log(error);
+    }
+
+    reservations = JSON.parse(data);
+
+    console.log(reservations);
+
+    for (var i = 1; i < reservations.length; i++) {
+        if (i < 6) {
+            $("#name-display").append("<span class='label label-primary'>" + i + "</span> | " + item.name);
+        } else {
+            $("#waitlist-display").append("<span class='label label-primary'>" + i + "</span> | " + item.name);
+        }
+    }
+
 });
 
 app.listen(PORT, function () {
