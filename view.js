@@ -5,7 +5,7 @@ fs.readFile("reservations.json", "utf8", function(error, data) {
         return console.log(error);
     }
 
-    reservations = JSON.parse(data)
+    reservations = JSON.parse(data);
 
     console.log(reservations);
 

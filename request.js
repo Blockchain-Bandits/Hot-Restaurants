@@ -1,4 +1,4 @@
-$("#add-btn").on("click", function(event) {
+$("#reserve").on("click", function(event) {
     event.preventDefault();
     var newReservation = {
         "name": $("#name").val().trim(),
@@ -7,7 +7,6 @@ $("#add-btn").on("click", function(event) {
         "id": $("#unique-id").val().trim()
     };
 
-    // Question: What does this code do??
     $.post("/api/new", newReservation)
         .done(function(data) {
             console.log(data);
