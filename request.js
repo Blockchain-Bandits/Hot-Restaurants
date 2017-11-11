@@ -1,3 +1,4 @@
+console.log("request called");
 $("#reserve").on("click", function(event) {
     event.preventDefault();
     var newReservation = {
