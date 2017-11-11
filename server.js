@@ -4,10 +4,14 @@ var path = require("path");
 var fs = require("fs");
 
 var app = express();
-var PORT = 3000;
 var PORT = process.env.PORT || 3000;
 
-var reservations;
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+var resObj = {
+    reservations:[]
+};
 
 fs.readFile("reservations.json", "utf8", function(error, data) {
     
@@ -15,12 +19,11 @@ fs.readFile("reservations.json", "utf8", function(error, data) {
         return console.log(error);
     }
 
-    console.log(data);
-    if (data) {
-        reservations = JSON.parse(data);
-    }
+    // console.log(data);
 
-    console.log(reservations);
+    if (data) {
+        resObj.reservations = JSON.parse(data).reservations;
+    }
 
 });
 
@@ -59,10 +62,9 @@ app.get("/api/:reservations?", function (req, res) {
 app.post("/api/new", function (req, res) {
     var newreservation = req.body;
     newreservation.routeName = newreservation.name.replace(/\s+/g, "").toLowerCase();
-    console.log(newreservation);
-    reservations.push(newreservation);
-
-    fs.writeFile("reservations.json", reservations, function(err) {
+    resObj.reservations.push(newreservation);
+    console.log(resObj);
+    fs.writeFile("reservations.json", JSON.stringify(resObj), function(err) {
         
         if (err) {
             return console.log(err);
