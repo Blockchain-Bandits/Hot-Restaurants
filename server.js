@@ -7,16 +7,19 @@ var app = express();
 var PORT = 3000;
 var PORT = process.env.PORT || 3000;
 
-var reservations = [];
+var reservations;
+
 fs.readFile("reservations.json", "utf8", function(error, data) {
     
     if (error) {
         return console.log(error);
     }
 
-    reservations = JSON.parse(data)
+    console.log(data);
+    if (data) {
+        reservations = JSON.parse(data);
+    }
 
-    // We will then re-display the content as an array for later use.
     console.log(reservations);
 
 });
