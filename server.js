@@ -21,8 +21,6 @@ fs.readFile("reservations.json", "utf8", function (error, data) {
         return console.log(error);
     }
 
-    // console.log(data);
-
     if (data) {
         resObj.reservations = JSON.parse(data).reservations;
     }
@@ -42,7 +40,7 @@ app.get("/view", function (req, res) {
 });
 
 app.get("/all", function (req, res) {
-    res.json(reservations);
+    res.json(resObj.reservations);
 });
 
 app.get("/api/:reservations?", function (req, res) {
@@ -51,14 +49,14 @@ app.get("/api/:reservations?", function (req, res) {
     if (chosen) {
         console.log(chosen);
 
-        for (var i = 0; i < reservations.length; i++) {
-            if (chosen === reservations[i].routeName) {
-                return res.json(reservations[i]);
+        for (var i = 0; i < resObj.reservations.length; i++) {
+            if (chosen === resObj.reservations[i].routeName) {
+                return res.json(resObj.reservations[i]);
             }
         }
         return res.json(false);
     }
-    return res.json(reservations);
+    return res.json(resObj.reservations);
 });
 
 app.post("/api/new", function (req, res) {
@@ -77,27 +75,6 @@ app.post("/api/new", function (req, res) {
     });
 
     res.json(newreservation);
-});
-
-
-fs.readFile("reservations.json", "utf8", function (error, data) {
-
-    if (error) {
-        return console.log(error);
-    }
-
-    reservations = JSON.parse(data);
-
-    console.log(reservations);
-
-    for (var i = 1; i < reservations.length; i++) {
-        if (i < 6) {
-            $("#name-display").append("<span class='label label-primary'>" + i + "</span> | " + item.name);
-        } else {
-            $("#waitlist-display").append("<span class='label label-primary'>" + i + "</span> | " + item.name);
-        }
-    }
-
 });
 
 app.listen(PORT, function () {

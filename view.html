@@ -5,6 +5,7 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
         crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery.js"></script>
 </head>
 
 <body>
@@ -56,5 +57,22 @@
 
 
 </body>
+
+<script>
+    $.ajax({
+        url: "/api",
+        method: "GET"
+    }).done(function (response) {
+        var reservations = response;
+        console.log(response);
+        for (var i = 0; i < reservations.length; i++) {
+            if (i < 5) {
+                $("#name-display").append("<div><span class='label label-primary'>" + (i+1) + "</span> | " + reservations[i].name + "</div>");
+            } else {
+                $("#waitlist-display").append("<div><span class='label label-primary'>" + (i+1) + "</span> | " + reservations[i].name + "</div>");
+            }
+        }
+    });
+</script>
 
 </html>
